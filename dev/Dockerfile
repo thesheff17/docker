@@ -4,7 +4,7 @@ MAINTAINER Dan Sheffner <Dan@Sheffner.com>
 
 # bugs:
 # tmux doesn't work some bug with the screen thing
-# feel free to research and submit a patch 
+# feel free to research and submit a patch
 
 # helper ENV variables
 RUN locale-gen en_US.UTF-8
@@ -19,19 +19,19 @@ COPY ./public.sources.list /etc/apt/sources.list
 
 # updates
 RUN apt-get update
-RUN apt-get upgrade -y 
+RUN apt-get upgrade -y
 
 # packages
-RUN apt-get install -yq curl wget python-pip python-dev \  
+RUN apt-get install -yq curl wget python-pip python-dev \
     git python3-pip python3-dev build-essential gcc vim-gnome \
     lsb-release mysql-client libpq-dev libjpeg-dev ffmpeg tmux \
-    screen php-mcrypt php-mysql php php-cli pypy
+    screen php-mcrypt php-mysql php php-cli pypy libffi-dev
 
 # ruby requirements:
 RUN apt-get install -yq zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
     libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev \
-    python-software-properties libffi-dev libgdbm-dev libncurses5-dev \
-    automake libtool bison libffi-dev
+    python-software-properties libgdbm-dev libncurses5-dev \
+    automake libtool bison libffi-dev gawk libgmp-dev pkg-config
 
 # couchbase client
 RUN wget http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-2-amd64.deb
@@ -44,22 +44,30 @@ RUN rm couchbase-release-1.0-2-amd64.deb
 RUN pip install --upgrade pip
 RUN pip3 install --upgrade pip
 
-# python pip 
+# python pip
 RUN pip install virtualenvwrapper boto3 couchbase django django-environ django-secure \
     whitenoise django-braces django-crispy-forms django-floppyforms django-model-utils \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy pycodestyle
 
-# python3 pip 
+# python3 pip
 RUN pip3 install boto3 couchbase django django-environ django-secure whitenoise \
     django-braces django-crispy-forms django-floppyforms django-model-utils \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy
- 
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy pycodestyle
+
+# flask
+RUN pip install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy flask-script \
+    flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt
+
+# flask
+RUN pip3 install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy flask-script \
+    flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt
+
 # go
 RUN wget --quiet https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go1.6.2.linux-amd64.tar.gz
