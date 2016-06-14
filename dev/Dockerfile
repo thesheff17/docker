@@ -25,7 +25,8 @@ RUN apt-get upgrade -y
 RUN apt-get install -yq curl wget python-pip python-dev \
     git python3-pip python3-dev build-essential gcc vim-gnome \
     lsb-release mysql-client libpq-dev libjpeg-dev ffmpeg tmux \
-    screen php-mcrypt php-mysql php php-cli pypy libffi-dev
+    screen php-mcrypt php-mysql php php-cli pypy libffi-dev \
+    libssl-dev openssl
 
 # ruby requirements:
 RUN apt-get install -yq zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
@@ -68,6 +69,16 @@ RUN pip install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy fl
 RUN pip3 install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy flask-script \
     flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt
 
+# compile python3 from source
+# not needed until versions are different between distro and python.org
+# WORKDIR /root/
+# RUN wget --quiet https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+# RUN tar -xf Python-3.5.1.tar.xz
+# WORKDIR /root/Python-3.5.1/
+# RUN ./configure
+# RUN make -j8
+# RUN make install
+
 # go
 RUN wget --quiet https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go1.6.2.linux-amd64.tar.gz
@@ -97,13 +108,13 @@ RUN git clone https://github.com/scrooloose/nerdtree
 RUN git clone https://github.com/Lokaltog/vim-powerline.git
 RUN git clone https://github.com/jistr/vim-nerdtree-tabs.git
 RUN git clone https://github.com/davidhalter/jedi-vim.git
-WORKDIR /root/.vim/colors/ 
+WORKDIR /root/.vim/colors/
 RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/wombat256mod.vim
 WORKDIR /root/.vim/ftplugin/
 RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/python_editing.vim
 WORKDIR /root/
 RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/vimrc
-RUN mv vimrc .vimrc 
+RUN mv vimrc .vimrc
 
 # tmux files
 # WORKDIR /root/
@@ -112,7 +123,7 @@ RUN mv vimrc .vimrc
 
 # cleanup
 RUN apt-get autoremove
-RUN apt-get clean 
+RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # command to run
