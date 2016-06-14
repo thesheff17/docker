@@ -5,7 +5,7 @@ docker
 docker images
 *************
 
-dev-min: minimum python3 dev env
+dev-min: minimum python3 and go dev env
 
 ::
 
