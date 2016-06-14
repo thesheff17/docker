@@ -9,13 +9,13 @@ dev-min: minimum python3 and go dev env
 
 ::
 
-    $ run -it --entrypoint /bin/bash thesheff17/dev-min
+    $ docker run -it --entrypoint /bin/bash thesheff17/dev-min
 
 dev: giant dev env
 
 ::
 
-    $ run -it --entrypoint /bin/bash thesheff17/dev
+    $ docker run -it --entrypoint /bin/bash thesheff17/dev
 
 compile for you own:
 
