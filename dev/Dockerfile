@@ -121,6 +121,10 @@ RUN mv vimrc .vimrc
 # RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/tmux_virtical2.sh
 # RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/tmux_horizontal3.sh
 
+# git clone repo
+WORKDIR /root/git/
+RUN git clone https://github.com/kubernetes/kubernetes.git
+
 # cleanup
 RUN apt-get autoremove
 RUN apt-get clean
