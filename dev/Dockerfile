@@ -130,5 +130,8 @@ RUN apt-get autoremove
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# switch back working dir
+WORKDIR /root/
+
 # command to run
 CMD ["/bin/bash"]
