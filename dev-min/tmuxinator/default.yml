@@ -1,0 +1,6 @@
+project_name: GoDev
+project_root: /root/go
+windows:
+  - editor: vim
+  - shell: bash
+  - shell: htop
