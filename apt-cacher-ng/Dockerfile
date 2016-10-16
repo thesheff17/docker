@@ -20,6 +20,6 @@ RUN \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+WORKDIR /root/
 EXPOSE 	3142
-
 CMD chmod 777 /var/cache/apt-cacher-ng && service apt-cacher-ng start && tail -f /var/log/apt-cacher-ng/*

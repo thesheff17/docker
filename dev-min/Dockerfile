@@ -19,7 +19,7 @@ ENV SHELL bash
 # COPY ./public.sources.list /etc/apt/sources.list
 COPY ./local.sources.list /etc/apt/sources.list
 
-# updates
+# apt-get
 RUN \
     apt-get update && \
     apt-get upgrade -y && \
@@ -149,4 +149,6 @@ COPY ./public.sources.list /etc/apt/sources.list
 # CMD ["/usr/local/bin/tmuxinator", "start", "default"]
 
 # CMD ["/bin/bash"]
+
+WORKDIR /root/
 CMD ["/usr/bin/tmux"]
