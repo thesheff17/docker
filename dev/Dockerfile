@@ -9,6 +9,9 @@ ENV LANGUAGE en_US:en
 ENV EDITOR vim
 ENV SHELL bash
 
+# build date
+RUN echo `date` > /root/build_date.txt
+
 # local.sources.list is a local mirror
 # public.sources.list is a public mirror
 COPY ./local.sources.list /etc/apt/sources.list
@@ -29,7 +32,7 @@ RUN \
     automake libtool bison libffi-dev gawk libgmp-dev pkg-config \
     gcc make libffi-dev pkg-config libz-dev libbz2-dev tcl-dev \
     libsqlite3-dev libncurses-dev libexpat1-dev libssl-dev pypy mercurial \
-    libgc-dev liblzma-dev && \
+    libgc-dev liblzma-dev tcl8.4-dev tk8.4-dev && \
     apt-get autoremove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -169,12 +172,17 @@ WORKDIR /root/git/go/src/
 RUN GOROOT_BOOTSTRAP=/usr/local/go/ GOOS=linux GOARCH=amd64 ./bootstrap.bash
 
 # pypy from source
-RUN \
-    cd /root/ && \ 
-    hg clone https://bitbucket.org/pypy/pypy && cd pypy/pypy/goal && \
-    pypy ../../rpython/bin/rpython -Ojit targetpypystandalone 
-# pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py 
+# This keeps erorring out.  If want to sumbit a patch please do.
+#RUN \
+#    rm /usr/include/tcl && \
+#    ln -s /usr/include/tcl8.4 /usr/include/tcl && \
+#    cd /root/ && \ 
+#    hg clone https://bitbucket.org/pypy/pypy && cd pypy/pypy/goal && \
+#    pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
+#    ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
 
+# pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py 
+# cp -r /usr/include/tcl8.4/* /usr/include/ && \
 # make share location
 RUN mkdir -p /root/git/
 
