@@ -10,6 +10,8 @@
 FROM ubuntu:16.04
 MAINTAINER Dan@Sheffner.com
 
+RUN echo `date` > /root/build_date.txt
+
 VOLUME	["/var/cache/apt-cacher-ng"]
 
 RUN \

@@ -13,6 +13,9 @@ ENV LANGUAGE en_US:en
 ENV EDITOR vim
 ENV SHELL bash
 
+# build date
+RUN echo `date` > /root/build_date.txt
+
 # local.sources.list is a local mirror
 # public.sources.list is a public mirror
 # use whatever you have

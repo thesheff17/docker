@@ -35,6 +35,7 @@ docker_pal.py --clean --image image_name
 # python imports
 import subprocess
 import argparse
+import datetime
 
 # pip imports
 
@@ -90,7 +91,8 @@ class Pal(object):
                 subprocess.call(command3)
 
     def build(self, location, name):
-        command1 = 'cd ' + location + '; docker build . -t ' + name
+        tag = (datetime.datetime.now().strftime("%Y%m%d"))
+        command1 = 'cd ' + location + '; docker build . -t ' + name + ":" + tag
         subprocess.call(command1, shell=True)
 
 if __name__ == "__main__":
