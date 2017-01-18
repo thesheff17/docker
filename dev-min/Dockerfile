@@ -30,7 +30,7 @@ RUN \
     build-essential gcc vim lsb-release mysql-client zsh \
     libpq-dev libjpeg-dev ffmpeg tmux screen cmake htop \
     net-tools inetutils-ping apt-utils libssl-dev \
-    libmemcached-dev python-dev python-pip && \
+    libmemcached-dev python-dev python-pip man && \
     apt-get autoremove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -73,12 +73,12 @@ RUN /bin/bash -c " source /root/.virtualenvs/venv/bin/activate && \
     flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt "
  
 # go
-RUN wget --quiet https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
+RUN wget --quiet https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.7.4.linux-amd64.tar.gz
 RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 RUN echo 'export GOBIN=/root/go/bin' >> /root/.bashrc
 RUN echo 'export GOPATH=/root/go/bin' >> /root/.bashrc 
-RUN rm go1.7.1.linux-amd64.tar.gz
+RUN rm go1.7.4.linux-amd64.tar.gz
 
 # vim modules
 RUN mkdir -p /root/.vim/autoload /root/.vim/bundle /root/.vim/colors/ /root/.vim/ftplugin/
@@ -89,8 +89,10 @@ RUN git clone https://github.com/kien/ctrlp.vim.git
 RUN git clone https://github.com/scrooloose/nerdtree
 RUN git clone https://github.com/Lokaltog/vim-powerline.git
 RUN git clone https://github.com/jistr/vim-nerdtree-tabs.git
-RUN git clone https://github.com/davidhalter/jedi-vim.git
+RUN git clone https://github.com/python-mode/python-mode.git
+# RUN git clone --recursive https://github.com/davidhalter/jedi-vim.git
 RUN git clone https://github.com/fatih/vim-go.git 
+RUN git clone https://github.com/vim-syntastic/syntastic.git
 
 WORKDIR /root/.vim/colors/ 
 RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/wombat256mod.vim

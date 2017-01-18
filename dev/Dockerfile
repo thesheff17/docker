@@ -32,7 +32,7 @@ RUN \
     automake libtool bison libffi-dev gawk libgmp-dev pkg-config \
     gcc make libffi-dev pkg-config libz-dev libbz2-dev tcl-dev \
     libsqlite3-dev libncurses-dev libexpat1-dev libssl-dev pypy mercurial \
-    libgc-dev liblzma-dev tcl8.4-dev tk8.4-dev && \
+    libgc-dev liblzma-dev tcl8.4-dev tk8.4-dev tk-dev net-tools man && \
     apt-get autoremove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -101,24 +101,23 @@ RUN /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
     pip install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy flask-script \
     flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt "
 
-
 # compile python3 from source
-# not needed until versions are different between distro and python.org
-# WORKDIR /root/
-# RUN wget --quiet https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
-# RUN tar -xf Python-3.5.1.tar.xz
-# WORKDIR /root/Python-3.5.1/
-# RUN ./configure
-# RUN make -j8
-# RUN make install
+WORKDIR /root/
+RUN wget --quiet https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz
+RUN tar -xf Python-3.6.0.tar.xz
+WORKDIR /root/Python-3.6.0/
+# RUN ./configure --enable-loadable-sqlite-extensions
+RUN ./configure --enable-optimizations --enable-loadable-sqlite-extensions
+RUN make -j9
+RUN make install
 
 # go
-RUN wget --quiet https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
+RUN wget --quiet https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.7.4.linux-amd64.tar.gz
 RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 RUN echo 'export GOBIN=/root/go/bin' >> /root/.bashrc
 RUN echo 'export GOPATH=/root/go/bin' >> /root/.bashrc
-RUN rm go1.7.1.linux-amd64.tar.gz
+RUN rm go1.7.4.linux-amd64.tar.gz
 
 # vim modules
 RUN mkdir -p /root/.vim/autoload /root/.vim/bundle /root/.vim/colors/ /root/.vim/ftplugin/
@@ -129,8 +128,10 @@ RUN git clone https://github.com/kien/ctrlp.vim.git
 RUN git clone https://github.com/scrooloose/nerdtree
 RUN git clone https://github.com/Lokaltog/vim-powerline.git
 RUN git clone https://github.com/jistr/vim-nerdtree-tabs.git
-RUN git clone https://github.com/davidhalter/jedi-vim.git
+RUN git clone https://github.com/python-mode/python-mode.git
+# RUN git clone --recursive https://github.com/davidhalter/jedi-vim.git
 RUN git clone https://github.com/fatih/vim-go.git
+RUN git clone https://github.com/vim-syntastic/syntastic.git
 
 WORKDIR /root/.vim/colors/
 RUN wget https://raw.githubusercontent.com/thesheff17/youtube/master/vim/wombat256mod.vim
@@ -173,13 +174,11 @@ RUN GOROOT_BOOTSTRAP=/usr/local/go/ GOOS=linux GOARCH=amd64 ./bootstrap.bash
 
 # pypy from source
 # This keeps erorring out.  If want to sumbit a patch please do.
-#RUN \
-#    rm /usr/include/tcl && \
-#    ln -s /usr/include/tcl8.4 /usr/include/tcl && \
-#    cd /root/ && \ 
-#    hg clone https://bitbucket.org/pypy/pypy && cd pypy/pypy/goal && \
-#    pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
-#    ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
+RUN \
+    cd /root/ && \ 
+    hg clone https://bitbucket.org/pypy/pypy && cd pypy/pypy/goal && \
+    pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
+    ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
 
 # pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py 
 # cp -r /usr/include/tcl8.4/* /usr/include/ && \
