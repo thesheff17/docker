@@ -73,19 +73,22 @@ RUN /bin/bash -c " source /root/.virtualenvs/venv/bin/activate && \
     flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt "
  
 # go
-RUN wget --quiet https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.7.4.linux-amd64.tar.gz
+RUN wget --quiet https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.8.linux-amd64.tar.gz
 RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 RUN echo 'export GOBIN=/root/go/bin' >> /root/.bashrc
 RUN echo 'export GOPATH=/root/go/bin' >> /root/.bashrc 
-RUN rm go1.7.4.linux-amd64.tar.gz
+RUN rm go1.8.linux-amd64.tar.gz
 
 # vim modules
 RUN mkdir -p /root/.vim/autoload /root/.vim/bundle /root/.vim/colors/ /root/.vim/ftplugin/
 RUN curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 WORKDIR /root/.vim/bundle/
 RUN git clone https://github.com/tpope/vim-sensible.git
-RUN git clone https://github.com/kien/ctrlp.vim.git
+RUN git clone https://github.com/ctrlpvim/ctrlp.vim.git
+
+# project died
+# RUN git clone https://github.com/kien/ctrlp.vim.git
 RUN git clone https://github.com/scrooloose/nerdtree
 RUN git clone https://github.com/Lokaltog/vim-powerline.git
 RUN git clone https://github.com/jistr/vim-nerdtree-tabs.git
