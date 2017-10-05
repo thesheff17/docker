@@ -1,0 +1,53 @@
+FROM thesheff17/dev:20171005
+
+MAINTAINER Dan Sheffner <Dan@Sheffner.com>
+
+# you can run this script to get the latest packages at any given time
+# if you want fixed use the above tag
+# time docker build -f Docker-bleeding-edge . -t thesheff17/dev-edge:`date +"%Y_%m_%d"`
+# real  4m6.832s lenovo laptop
+
+# local.sources.list is a local mirror
+# public.sources.list is a public mirror
+COPY ./local.sources.list /etc/apt/sources.list
+
+# build date
+RUN echo `date` > /root/build_date.txt
+
+RUN \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# pip upgrades
+RUN pip3 install --upgrade pip && pip2 install --upgrade pip
+
+
+# python3 pip
+RUN \
+   /bin/bash -c " source /root/.virtualenvs/venv3/bin/activate && \
+   pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+
+# python2 pip
+RUN \
+   /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
+   pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+
+# update git repo
+RUN cd /root/.vim/bundle/ && \
+    ls | xargs -I{} git -C {} pull
+
+# update go packages
+RUN export PATH=$PATH:/usr/local/go/bin && \
+    export GOPATH=/root/go/bin && \
+    export GOBIN=/root/go/bin && \
+    go get -u all
+
+# put back public mirror
+COPY ./public.sources.list /etc/apt/sources.list
+
+# CMD ["/bin/bash"]
+WORKDIR /root/
+CMD ["/usr/bin/tmux"]
