@@ -189,6 +189,11 @@ RUN \
     pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
     ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
 
+# rust
+RUN curl https://sh.rustup.rs -sSf > output && \
+    chmod +x output && \
+    ./output -y
+
 # pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py
 # cp -r /usr/include/tcl8.4/* /usr/include/ && \
 # make share location
