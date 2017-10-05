@@ -53,7 +53,7 @@ RUN rm couchbase-release-1.0-2-amd64.deb
 # pip upgrades
 RUN pip3 install --upgrade pip && pip2 install --upgrade pip
 
-# virtualenv 
+# virtualenv
 RUN pip2 install virtualenvwrapper virtualenv && \
     cd /root/ && \
     /bin/bash -c "source /usr/local/bin/virtualenvwrapper.sh && \
@@ -77,7 +77,7 @@ RUN \
     echo "#!/bin/bash" > /root/.virtualenvs/venv2/bin/preactivate && \
     echo "# This hook is run before this virtualenv is activated." >> /root/.virtualenvs/venv2/bin/preactivate
 
-# python3 pip 
+# python3 pip
 RUN \
    /bin/bash -c " source /root/.virtualenvs/venv3/bin/activate && \
    pip3 install boto3 django django-environ django-secure whitenoise \
@@ -85,14 +85,14 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter"
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter boto awscli"
 
 # python3 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv3/bin/activate && \
     pip3 install flask flask-bcrypt flask-login flask-migrate flask-sqlalchemy flask-script \
     flask-testing flask-wtf mako markupsafe wtforms alembic gunicorn itsdangerous py-bcrypt "
 
-# python2 pip 
+# python2 pip
 RUN \
    /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
    pip install boto3 django django-environ django-secure whitenoise \
@@ -100,7 +100,7 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter "
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter boto awscli"
 
 # python2 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
@@ -184,12 +184,12 @@ RUN GOROOT_BOOTSTRAP=/usr/local/go/ GOOS=linux GOARCH=amd64 ./bootstrap.bash
 # pypy from source
 # This keeps erorring out.  If want to sumbit a patch please do.
 RUN \
-    cd /root/ && \ 
+    cd /root/ && \
     hg clone https://bitbucket.org/pypy/pypy && cd pypy/pypy/goal && \
     pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
     ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
 
-# pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py 
+# pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py
 # cp -r /usr/include/tcl8.4/* /usr/include/ && \
 # make share location
 RUN mkdir -p /root/git/
