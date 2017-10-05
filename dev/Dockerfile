@@ -2,6 +2,16 @@ FROM ubuntu:16.04
 
 MAINTAINER Dan Sheffner <Dan@Sheffner.com>
 
+# local.sources.list is a local mirror
+# public.sources.list is a public mirror
+COPY ./local.sources.list /etc/apt/sources.list
+
+# install local-gen
+RUN apt-get clean && apt-get update && apt-get install -y locales && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # helper ENV variables
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -12,10 +22,6 @@ ENV SHELL bash
 # build date
 RUN echo `date` > /root/build_date.txt
 
-# local.sources.list is a local mirror
-# public.sources.list is a public mirror
-COPY ./local.sources.list /etc/apt/sources.list
-
 # after openssl is ruby required packages
 # after pgk-config is pypy required packages
 RUN \
@@ -25,7 +31,7 @@ RUN \
     git python3-pip python3-dev build-essential gcc vim \
     lsb-release mysql-client libpq-dev libjpeg-dev ffmpeg tmux \
     screen php-mcrypt php-mysql php php-cli pypy libffi-dev \
-    libssl-dev openssl openjdk-8-jdk \
+    libssl-dev openssl openjdk-8-jdk libmemcached-dev \
     zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
     libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev \
     python-software-properties libgdbm-dev libncurses5-dev \
@@ -79,7 +85,7 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython"
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter"
 
 # python3 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv3/bin/activate && \
@@ -94,7 +100,7 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython"
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter "
 
 # python2 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
@@ -103,21 +109,21 @@ RUN /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
 
 # compile python3 from source
 WORKDIR /root/
-RUN wget --quiet https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
-RUN tar -xf Python-3.6.1.tar.xz
-WORKDIR /root/Python-3.6.1/
+RUN wget --quiet https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
+RUN tar -xf Python-3.6.3.tar.xz
+WORKDIR /root/Python-3.6.3/
 # RUN ./configure --enable-loadable-sqlite-extensions
 RUN ./configure --enable-optimizations --enable-loadable-sqlite-extensions
 RUN make -j9
 RUN make install
 
 # go
-RUN wget --quiet https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.8.linux-amd64.tar.gz
+RUN wget --quiet https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.9.1.linux-amd64.tar.gz
 RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
 RUN echo 'export GOBIN=/root/go/bin' >> /root/.bashrc
 RUN echo 'export GOPATH=/root/go/bin' >> /root/.bashrc
-RUN rm go1.8.linux-amd64.tar.gz
+RUN rm go1.9.1.linux-amd64.tar.gz
 
 # vim modules
 RUN mkdir -p /root/.vim/autoload /root/.vim/bundle /root/.vim/colors/ /root/.vim/ftplugin/
