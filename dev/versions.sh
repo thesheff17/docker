@@ -10,7 +10,7 @@ rustc --version
 cargo --version
 ruby --version
 rails --version
-nodejs --version
-npm --version
+echo 'nodejs: ' && nodejs --version
+echo 'npm: ' && npm --version
 powershell -version
 pypy-c --version
