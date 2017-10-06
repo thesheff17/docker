@@ -6,13 +6,8 @@ MAINTAINER Dan Sheffner <Dan@Sheffner.com>
 # public.sources.list is a public mirror
 COPY ./local.sources.list /etc/apt/sources.list
 
-# install local-gen
-RUN apt-get clean && apt-get update && apt-get install -y locales && \
-    apt-get autoremove && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # helper ENV variables
+RUN apt-get clean && apt-get update && apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -31,7 +26,7 @@ RUN \
     git python3-pip python3-dev build-essential gcc vim \
     lsb-release mysql-client libpq-dev libjpeg-dev ffmpeg tmux \
     screen php-mcrypt php-mysql php php-cli pypy libffi-dev \
-    libssl-dev openssl openjdk-8-jdk libmemcached-dev \
+    libssl-dev openssl openjdk-8-jdk libmemcached-dev nodejs npm \
     zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
     libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev \
     python-software-properties libgdbm-dev libncurses5-dev \
@@ -85,7 +80,7 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter boto awscli"
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter"
 
 # python3 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv3/bin/activate && \
@@ -100,7 +95,7 @@ RUN \
     pillow django-allauth psycopg2 unicode-slugify django-autoslug pytz django-redis \
     redis pymysql libsass django-compressor django-sass-processor django-debug-toolbar \
     django_extensions django-nose django-axes python-dateutil pyflakes coverage sphinx \
-    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter boto awscli"
+    werkzeug django-test-plus factory_boy ipdb sqlalchemy bpython pylibmc jupyter "
 
 # python2 flask
 RUN /bin/bash -c " source /root/.virtualenvs/venv2/bin/activate && \
@@ -189,11 +184,6 @@ RUN \
     pypy ../../rpython/bin/rpython -Ojit targetpypystandalone && \
     ln -s /root/pypy/pypy/goal/pypy-c /usr/bin/pypy-c
 
-# rust
-RUN curl https://sh.rustup.rs -sSf > output && \
-    chmod +x output && \
-    ./output -y
-
 # pypy rpython/bin/rpython --opt=jit pypy/goal/targetpypystandalone.py
 # cp -r /usr/include/tcl8.4/* /usr/include/ && \
 # make share location
@@ -206,6 +196,7 @@ RUN echo 'set-option -g default-shell /bin/bash' > /root/.tmux.conf
 # Copy over samples
 COPY ./webserver.go /root/bin/
 COPY ./webserver.py /root/bin/
+COPY ./versions.sh /root/bin/
 
 # put back public mirror
 COPY ./public.sources.list /etc/apt/sources.list
