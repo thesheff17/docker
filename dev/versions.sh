@@ -13,3 +13,4 @@ rails --version
 nodejs --version
 npm --version
 powershell -version
+pypy-c --version

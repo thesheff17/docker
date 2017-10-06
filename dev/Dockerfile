@@ -194,10 +194,15 @@ RUN mkdir -p /root/git/
 # ADD tmuxinator /root/.tmuxinator
 RUN echo 'set-option -g default-shell /bin/bash' > /root/.tmux.conf
 
+# rust
+RUN curl -sSf https://static.rust-lang.org/rustup.sh > rustup.sh && \
+    chmod +x ./rustup.sh && \
+    ./rustup.sh
+
 # powershell
 RUN curl -fsSL https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/download.sh > powershell_install && \
     chmod +x powershell_install && \
-        ./powershell_install
+    ./powershell_install
 
 # Copy over samples
 COPY ./webserver.go /root/bin/
