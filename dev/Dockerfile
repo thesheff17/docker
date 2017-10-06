@@ -28,6 +28,7 @@ RUN \
     screen php-mcrypt php-mysql php php-cli pypy libffi-dev \
     libssl-dev openssl openjdk-8-jdk libmemcached-dev nodejs npm \
     zlib1g-dev libssl-dev libreadline-dev libyaml-dev \
+    sudo liblttng-ust-ctl2 liblttng-ust0 libunwind8 liburcu4 \
     libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev \
     python-software-properties libgdbm-dev libncurses5-dev \
     automake libtool bison libffi-dev gawk libgmp-dev pkg-config \
@@ -192,6 +193,11 @@ RUN mkdir -p /root/git/
 # tmux setup
 # ADD tmuxinator /root/.tmuxinator
 RUN echo 'set-option -g default-shell /bin/bash' > /root/.tmux.conf
+
+# powershell
+RUN curl -fsSL https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/download.sh > powershell_install && \
+    chmod +x powershell_install && \
+        ./powershell_install
 
 # Copy over samples
 COPY ./webserver.go /root/bin/

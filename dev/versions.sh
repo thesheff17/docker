@@ -12,3 +12,4 @@ ruby --version
 rails --version
 nodejs --version
 npm --version
+powershell -version
