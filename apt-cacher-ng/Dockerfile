@@ -1,3 +1,4 @@
+FROM ubuntu:latest
 # BUILD:
 # docker build . -t thesheff17/apt-cacher-ng
 
@@ -7,10 +8,8 @@
 
 # USE:
 # docker run -t -t --rm -e http_proxy http://dockerhost:3142 debian bash
-FROM ubuntu:16.04
-MAINTAINER Dan@Sheffner.com
 
-RUN echo `date` > /root/build_date.txt
+# MAINTAINER Dan@Sheffner.com
 
 VOLUME	["/var/cache/apt-cacher-ng"]
 
