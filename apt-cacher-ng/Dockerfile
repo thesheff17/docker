@@ -8,6 +8,8 @@ FROM ubuntu:latest
 
 # USE:
 # docker run -t -t --rm -e http_proxy http://dockerhost:3142 debian bash
+# RUN  echo 'Acquire::http { Proxy "http://172.17.0.2:3142"; };' >> /etc/apt/apt.conf.d/01proxy
+# RUN rm /etc/apt/apt.conf.d/01proxy
 
 # MAINTAINER Dan@Sheffner.com
 
