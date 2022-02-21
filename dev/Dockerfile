@@ -1,10 +1,9 @@
 FROM ubuntu:rolling
 
-# build date
+# docker build . -t thesheff17/dev:latest
+
 RUN echo `date` > /root/build_date.txt
 
-# after openssl is ruby required packages
-# after pgk-config is pypy required packages
 RUN \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
@@ -26,8 +25,12 @@ RUN \
 
 RUN yes | unminimize
 
+COPY requirements.txt /root/requirements.txt
+
 RUN \
     curl -q "https://bootstrap.pypa.io/get-pip.py" -o "/root/get-pip.py" && \
-    python3 /root/get-pip.py 
+    python3 /root/get-pip.py && \
+    python3 -m venv /opt/venv && \
+    /bin/bash -c " source /opt/venv/bin/activate && pip3 install -r /root/requirements.txt"
 
 CMD ["/bin/bash"]
